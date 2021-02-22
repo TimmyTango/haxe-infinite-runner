@@ -893,7 +893,7 @@ ApplicationMain.main = function() {
 ApplicationMain.create = function(config) {
 	var app = new openfl_display_Application();
 	ManifestResources.init(config);
-	app.meta.h["build"] = "62";
+	app.meta.h["build"] = "71";
 	app.meta.h["company"] = "HaxeFlixel";
 	app.meta.h["file"] = "infinite-runner";
 	app.meta.h["name"] = "Infinite Runner";
@@ -8020,11 +8020,14 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 	,score: null
 	,lastScoreInt: null
 	,scoreText: null
+	,cameraDeadzone: null
 	,create: function() {
 		flixel_FlxG.mouse.set_visible(false);
 		this.player = new Player(64,flixel_FlxG.height - 100);
 		this.add(this.player);
-		flixel_FlxG.camera.follow(this.player,flixel_FlxCameraFollowStyle.PLATFORMER);
+		this.cameraDeadzone = new flixel_math_FlxRect(0,0,64,flixel_FlxG.height - this.player.get_height() * 4);
+		flixel_FlxG.camera.follow(this.player);
+		flixel_FlxG.camera.deadzone = this.cameraDeadzone;
 		this.platforms = new flixel_group_FlxTypedGroup();
 		this.lastPlatform = new Platform(0,flixel_FlxG.height,flixel_FlxG.width,60,32);
 		this.platforms.add(this.lastPlatform);
@@ -69674,7 +69677,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 182000;
+	this.version = 350779;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
